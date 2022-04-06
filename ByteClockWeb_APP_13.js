@@ -60,16 +60,21 @@ function setup() {
 //  createCanvas(600, 800);
 //output = new AdaptiveOutput(this,1920,1080);
 
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(displayWidth, displayHeight);
+  pixelDensity(1);
 //  canvas.parent('sketch-holder');
 //  _handleMotion();
 console.log('orientation: ', deviceOrientation);  
 // landscape/portrait
 mobileDesktop = deviceOrientation;  
+
+   console.log('displayWidth -> ', displayWidth);
+   console.log('displayWidth -> ', displayHeight);
   
- koef = width/height;
- centr = width/2;
- if (koef < 0.8) {mobileView = true;}
+ koef = displayWidth/displayHeight;
+ centr = displayWidth/2; 
+  
+  if (koef < 0.8) {mobileView = true;}
  else {mobileView = false;}
  console.log('koef -> ', koef);
 
