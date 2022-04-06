@@ -773,7 +773,7 @@ document.getElementById("curkey").innerHTML = "current keyAPI: " + parseKey;    
 }  // draw
 
 /// Add these lines below sketch to prevent scrolling on mobile
-function touchMoved() {
+//function touchMoved() {
   // do some stuff
-  return false;
-}
+//  return false;
+//}
