@@ -41,6 +41,10 @@ function onDisconnected() {
 
 // A function that will be called once got characteristics
 function handleNotifications(value) {
+//    $!bright!offset!synctime!sensorID!MAC!narodEN!forecastEn!cityID!keyAPI;
+
+//    $!1!7!0!5!78:21:84:7C:87:90!0!1!1726354!qwertyuiopasdfghjklzxcvbnmqwerty;
+
   //console.log('BLE data: ', data);
   //myBLEValue = data;
 
@@ -51,14 +55,15 @@ console.log('entered data: ', receivedValue);
 console.log('data length ', receivedValue.length);
 
 var start = receivedValue.charAt(0);
-var finish = receivedValue.charAt(receivedValue.length-1);
+var finish = receivedValue.charAt(receivedValue.length-3);
 
 console.log('start symbol -> ', start);
 console.log('finish symbol -> ', finish);
 
 if ((start == '$') && (finish == ';')) {
 
-parseString = receivedValue.substring(1,receivedValue.length-1);
+//parseString = receivedValue.substring(1,receivedValue.length);
+parseString = receivedValue.substring(1,receivedValue.indexOf(';'));
 console.log('string for parsing -> ', parseString);
 
 parsedData = split(parseString, '!');
@@ -96,8 +101,9 @@ function stopNotifications() {
 
 //-------------- parsing event -----------------
 function parsingEvent() {
-  
-  //    $!1!7!0!5!78:21:84:7C:87:90!0!1!1726354!qwertyuiopasdfghjklzxcvbnmqwerty;
+//    $!bright!offset!synctime!sensorID!MAC!narodEN!forecastEn!cityID!keyAPI;
+
+//    $!1!7!0!5!78:21:84:7C:87:90!0!1!1726354!qwertyuiopasdfghjklzxcvbnmqwerty;
   
 var data = this.value();
 console.log('entered data: ', data);
@@ -237,7 +243,7 @@ indata = '$3!' + d + '!' + mon + '!' + yr + ';';
 function writeToBle(wrMode) {
   let inputValue;
 
-  switch (wrMode) {  // формирую значение для записи по BLE в соответствии с протоколом
+  switch (wrMode) {  // С„РѕСЂРјРёСЂСѓСЋ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ Р·Р°РїРёСЃРё РїРѕ BLE РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ РїСЂРѕС‚РѕРєРѕР»РѕРј
     case 0:
     inputValue = '$' + wrMode + '!' + brightV + ';';    
     break;
@@ -300,8 +306,8 @@ function writeToBle(wrMode) {
     break;
 
 /*
-// если не получиться как выше можно попробовать так,
-// здесь надо указывать характеристику которая предназначена для записи
+// РµСЃР»Рё РЅРµ РїРѕР»СѓС‡РёС‚СЊСЃСЏ РєР°Рє РІС‹С€Рµ РјРѕР¶РЅРѕ РїРѕРїСЂРѕР±РѕРІР°С‚СЊ С‚Р°Рє,
+// Р·РґРµСЃСЊ РЅР°РґРѕ СѓРєР°Р·С‹РІР°С‚СЊ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєСѓ РєРѕС‚РѕСЂР°СЏ РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅР° РґР»СЏ Р·Р°РїРёСЃРё
   if (!("TextEncoder" in window)) {
   console.log('This browser does not support TextEncoder...');
   }
@@ -545,7 +551,7 @@ if (isConnected) {
 function setMAC() {
   narodMAC = inputMac.value();
 
-if ((narodMAC.length != 0) && isConnected){  // только если введен MAC и есть подключение по bluetooth
+if ((narodMAC.length != 0) && isConnected){  // С‚РѕР»СЊРєРѕ РµСЃР»Рё РІРІРµРґРµРЅ MAC Рё РµСЃС‚СЊ РїРѕРґРєР»СЋС‡РµРЅРёРµ РїРѕ bluetooth
  writeToBle(8);
  console.log('MAC address: ', narodMAC);
 }
@@ -630,7 +636,7 @@ writeToBle(2);
 function writeWiFiSet() {
   ssid = inputSSID.value();
   pas = inputPSW.value();
-if ((ssid.length /*&& pas*/ != 0) && isConnected){  // только если введены имя/пароль и есть подключение по bluetooth
+if ((ssid.length /*&& pas*/ != 0) && isConnected){  // С‚РѕР»СЊРєРѕ РµСЃР»Рё РІРІРµРґРµРЅС‹ РёРјСЏ/РїР°СЂРѕР»СЊ Рё РµСЃС‚СЊ РїРѕРґРєР»СЋС‡РµРЅРёРµ РїРѕ bluetooth
  writeToBle(15);
  console.log('wifi settings: ', ssid +',' + pas);
 }
