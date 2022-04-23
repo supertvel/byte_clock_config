@@ -1,4 +1,4 @@
-//let input, connectButton, greeting, title;
+
 //const serviceUuid = "0000ffe0-0000-1000-8000-00805f9b34fb";  // service for make connection
 const serviceUuid = 0xFFE0;  // service for make connection
 const serviceUuid_r = "0000ffe2-0000-1000-8000-00805f9b34fb";
@@ -42,7 +42,7 @@ let setComplete = false;
 var syncWithNet;
 var syncWithNarod;
 var enForecast;
-var parseString, parsedData;
+var parseString = "", parsedData = "";
 var parseBright;
 var parseOffset;
 var parseSync;
@@ -56,27 +56,35 @@ var mobileDesktop;
 var currSync;
 
 function setup() {
-  // create canvas
-//  createCanvas(600, 800);
-//output = new AdaptiveOutput(this,1920,1080);
 
-  createCanvas(displayWidth, displayHeight);
-  pixelDensity(1);
-//  canvas.parent('sketch-holder');
-//  _handleMotion();
 console.log('orientation: ', deviceOrientation);  
 // landscape/portrait
 mobileDesktop = deviceOrientation;  
+  // create canvas
+//  createCanvas(600, 800);
+//output = new AdaptiveOutput(this,1920,1080);
+createCanvas(windowWidth, windowHeight);
+//  createCanvas(displayWidth, displayHeight);
+  pixelDensity(1);
+//  canvas.parent('sketch-holder');
+//  _handleMotion();
 
-   console.log('displayWidth -> ', displayWidth);
-   console.log('displayWidth -> ', displayHeight);
+console.log('displayWidth -> ', displayWidth);
+console.log('displayWidth -> ', displayHeight);
   
- koef = displayWidth/displayHeight;
- centr = displayWidth/2; 
-  
-  if (koef < 0.8) {mobileView = true;}
+ //koef = displayWidth/displayHeight;
+ //centr = displayWidth/2;
+ 
+  koef = windowWidth/windowHeight;
+ centr = windowWidth/2;
+ 
+/*
+ if (koef < 0.8) {mobileView = true;}
  else {mobileView = false;}
  console.log('koef -> ', koef);
+*/
+if (mobileDesktop=='portrait'){mobileView = true;}
+ else {mobileView = false;}
 
   textSize(20);
   noStroke();
@@ -136,8 +144,8 @@ iconW = width/3 - 20;
 //}
 console.log('btnW -> ', btnW);
 
-//--------------------- заголовок ------------------------
-  title = createElement('h4', 'BYTE CLOCK configuration ver.13');  
+//--------------------- Р·Р°РіРѕР»РѕРІРѕРє ------------------------
+  title = createElement('h4', 'BYTE CLOCK configuration ver.14');  
   title.style('font-family','"Courier New", "Lucida Console", monospace');
   title.style('margin', '5px');
   title.style('color', '#efefef');
@@ -145,7 +153,7 @@ console.log('btnW -> ', btnW);
   title.position(365, 0);
   if(mobileView) 
   {  title.position(85, 0);}
-//----------------- кнопки connect/disconnect -------------
+//----------------- РєРЅРѕРїРєРё connect/disconnect -------------
   // Create a 'Connect' button
   const connectButton = createButton('connect');
   connectButton.mousePressed(connectToBle);
@@ -191,15 +199,15 @@ console.log('btnW -> ', btnW);
 //  btn.style('border','solid 2px transparent');
 //  btn.style('border-radius','0.4em');
 
-//--------------- текстовый ввод SSID ---------------------------
+//--------------- С‚РµРєСЃС‚РѕРІС‹Р№ РІРІРѕРґ SSID ---------------------------
   // Create a text input
-//  inputSSID = createInput('ssid');  // можно сразу задать hint
-  inputSSID = createInput().attribute('placeholder', 'ssid');  // а можно через добавление атрибута
+//  inputSSID = createInput('ssid');  // РјРѕР¶РЅРѕ СЃСЂР°Р·Сѓ Р·Р°РґР°С‚СЊ hint
+  inputSSID = createInput().attribute('placeholder', 'ssid');  // Р° РјРѕР¶РЅРѕ С‡РµСЂРµР· РґРѕР±Р°РІР»РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р°
   inputSSID.position(15, connectButton.y+connectButton.height + 10);
   if(mobileView) {inputSSID.size(btnW/1.52,40);}
   else {inputSSID.size(165,40);}
   inputSSID.class('inputfield');
-//--------------- текстовый ввод PASSWORD ---------------------------
+//--------------- С‚РµРєСЃС‚РѕРІС‹Р№ РІРІРѕРґ PASSWORD ---------------------------
   // Create a text input
   inputPSW = createInput().attribute('placeholder', 'password').attribute('type', 'password');
   inputPSW.position(inputSSID.width + 20, connectButton.y+connectButton.height + 10);
@@ -208,7 +216,7 @@ console.log('btnW -> ', btnW);
 //  inputPSW.size(165,35);
   inputPSW.class('inputfield');
 //  inputPSW.style('type','password');
-//------------------- кнопка save WIFI settings ---------------------------
+//------------------- РєРЅРѕРїРєР° save WIFI settings ---------------------------
   // Create a 'Write' button
   const writeButton = createButton('save WI-FI settings');
   writeButton.position(inputSSID.width + inputPSW.width + 25, inputSSID.y );
@@ -260,7 +268,8 @@ brTitle.position(brightCheckBox.y+125, connectButton.height + inputSSID.height +
   //textAlign(CENTER);
   //textSize(20);
 //bSlider.changed(brChanged);
-  bSlider.mouseReleased(brChanged);  // значение слайдера обновляется только при отпускании мыши
+  bSlider.mouseReleased(brChanged);  // Р·РЅР°С‡РµРЅРёРµ СЃР»Р°Р№РґРµСЂР° РѕР±РЅРѕРІР»СЏРµС‚СЃСЏ С‚РѕР»СЊРєРѕ РїСЂРё РѕС‚РїСѓСЃРєР°РЅРёРё РјС‹С€Рё
+//bSlider.touchEnded(brChanged);
 //------------------- date/time input selectors ------------------------
   databInput = createInput('1970-01-01', 'date');
   databInput.position(15, bSlider.y + 60);
@@ -309,7 +318,13 @@ brTitle.position(brightCheckBox.y+125, connectButton.height + inputSSID.height +
   selUTC.selected('0');
   selUTC.changed(utcSelectEvent);
   selUTC.class('selector');
-  
+
+    //------------------- current UTC offset number ----------------------
+  currentUTC = createP('UTC: ');
+  currentUTC.style('margin','2px');
+  currentUTC.class('currentdata');
+  currentUTC.id('curutc');
+  currentUTC.position(selUTC.x + selUTC.width + 10,selUTC.y+5);
     //--------------------- UTC offset label ------------------------  
 utcLabel = createElement('h4', 'UTC offset');
 utcLabel.style('color', '#ffffff');
@@ -318,7 +333,7 @@ utcLabel.style('margin', '3px');
 utcLabel.style('font-family','"Courier New", "Lucida Console", monospace');
 utcLabel.position(selUTC.x-10, selUTC.y - 25);
   
- //----------------- кнопкa sync date with system -------------
+ //----------------- РєРЅРѕРїРєa sync date with system -------------
   //const dateButton = createButton('sync date with OS');
   //dateButton.mousePressed(setDate);
   //if(mobileView) {dateButton.size(btnW/1.95,40);}
@@ -326,7 +341,7 @@ utcLabel.position(selUTC.x-10, selUTC.y - 25);
   //dateButton.position(15, databInput.y + 60);
   //dateButton.class('timeDate');
  
- //----------------- кнопкa sync time & date with system -------------
+ //----------------- РєРЅРѕРїРєa sync time & date with system -------------
   // Create a 'set time' button
   const timeButton = createButton('sync time & date with system');
   timeButton.mousePressed(setTime);
@@ -364,13 +379,13 @@ timeSyncEn.position(timeButton.x + timeButton.width + 10, timeButton.y-20);
 //+++++++++++++++++++++
  
 /*
-  //--------------- текстовый ввод set timezone offset ---------------------------
-  inputTimeZone = createInput().attribute('placeholder', 'time zone');  // а можно через добавление атрибута
+  //--------------- С‚РµРєСЃС‚РѕРІС‹Р№ РІРІРѕРґ set timezone offset ---------------------------
+  inputTimeZone = createInput().attribute('placeholder', 'time zone');  // Р° РјРѕР¶РЅРѕ С‡РµСЂРµР· РґРѕР±Р°РІР»РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р°
   inputTimeZone.position( 15, timeButton.y+timeButton.height+10);
   if(mobileView) {inputTimeZone.size(btnW/1.95,40);}
   else {inputTimeZone.size(200,40);}
   inputTimeZone.class('inputfield');
-   //----------------- кнопка set TIME zone -------------
+   //----------------- РєРЅРѕРїРєР° set TIME zone -------------
   const setOffset = createButton('set TIME zone');
   setOffset.mousePressed(setTimeZone);
   if(mobileView) {setOffset.size(btnW/1.95,40);}
@@ -385,10 +400,10 @@ timeSyncEn.position(timeButton.x + timeButton.width + 10, timeButton.y-20);
   currentSensID.class('currentdata');
   currentSensID.id('cursensid');
   currentSensID.position(15,timeButton.y+timeButton.height+10); 
-  //--------------- текстовый ввод sensor ID ---------------------------
+  //--------------- С‚РµРєСЃС‚РѕРІС‹Р№ РІРІРѕРґ sensor ID ---------------------------
   // Create a text input
-//  inputSSID = createInput('ssid');  // можно сразу задать hint
-  inputSensorID = createInput().attribute('placeholder', 'enter sensor ID');  // а можно через добавление атрибута
+//  inputSSID = createInput('ssid');  // РјРѕР¶РЅРѕ СЃСЂР°Р·Сѓ Р·Р°РґР°С‚СЊ hint
+  inputSensorID = createInput().attribute('placeholder', 'enter sensor ID');  // Р° РјРѕР¶РЅРѕ С‡РµСЂРµР· РґРѕР±Р°РІР»РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р°
   inputSensorID.position( 15, currentSensID.y+currentSensID.height+10);
 //  inputTimeZone.position( 15, inputSensorID.y+inputSensorID.height+20);
 //  inputSSID.position(15, connectButton.y+connectButton.height + 20);
@@ -396,10 +411,10 @@ timeSyncEn.position(timeButton.x + timeButton.width + 10, timeButton.y-20);
   else {inputSensorID.size(200,40);}
   inputSensorID.class('inputfield');
  
- //----------------- кнопка set sensor ID -------------
+ //----------------- РєРЅРѕРїРєР° set sensor ID -------------
   const setIDButton = createButton('set sensor ID');
+//  setIDButton.touchStarted(setSensorID);
   setIDButton.mousePressed(setSensorID);
-//  dateButton.style('font-size', '18px');
   if(mobileView) {setIDButton.size(btnW/1.5,40);}
   else {setIDButton.size(200,40);}
 //  setIDButton.size(160,35);
@@ -413,16 +428,16 @@ timeSyncEn.position(timeButton.x + timeButton.width + 10, timeButton.y-20);
   currentSensMAC.id('cursensmac');
   currentSensMAC.position(15,inputSensorID.y+inputSensorID.height+10); 
 
-  //--------------- текстовый ввод set MAC adress ---------------------------
+  //--------------- С‚РµРєСЃС‚РѕРІС‹Р№ РІРІРѕРґ set MAC adress ---------------------------
   // Create a text input
-//  inputSSID = createInput('ssid');  // можно сразу задать hint
-  inputMac = createInput().attribute('placeholder', 'enter MAC address');  // а можно через добавление атрибута
+//  inputSSID = createInput('ssid');  // РјРѕР¶РЅРѕ СЃСЂР°Р·Сѓ Р·Р°РґР°С‚СЊ hint
+  inputMac = createInput().attribute('placeholder', 'enter MAC address');  // Р° РјРѕР¶РЅРѕ С‡РµСЂРµР· РґРѕР±Р°РІР»РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р°
   inputMac.position( 15, currentSensMAC.y+currentSensMAC.height+10);
 //  inputSSID.position(15, connectButton.y+connectButton.height + 20);
   if(mobileView) {inputMac.size(btnW/1.5,40);}
   else {inputMac.size(200,40);}
   inputMac.class('inputfield');
- //----------------- кнопка set MAC adress -------------
+ //----------------- РєРЅРѕРїРєР° set MAC adress -------------
   const setMac = createButton('set MAC address');
   setMac.mousePressed(setMAC);
 //  dateButton.style('font-size', '18px');
@@ -464,16 +479,16 @@ narodmonEn.position(setMac.x + setMac.width + 25, setMac.y-25);
   currentCityID.class('currentdata');
   currentCityID.id('curcityid');
   currentCityID.position(15,setMac.y+setMac.height+10); 
-  //--------------- текстовый ввод set city ID ---------------------------
+  //--------------- С‚РµРєСЃС‚РѕРІС‹Р№ РІРІРѕРґ set city ID ---------------------------
   // Create a text input
-//  inputSSID = createInput('ssid');  // можно сразу задать hint
-  inputCityID = createInput().attribute('placeholder', 'enter city ID');  // а можно через добавление атрибута
+//  inputSSID = createInput('ssid');  // РјРѕР¶РЅРѕ СЃСЂР°Р·Сѓ Р·Р°РґР°С‚СЊ hint
+  inputCityID = createInput().attribute('placeholder', 'enter city ID');  // Р° РјРѕР¶РЅРѕ С‡РµСЂРµР· РґРѕР±Р°РІР»РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р°
   inputCityID.position( 15, currentCityID.y+currentCityID.height+10);
 //  inputSSID.position(15, connectButton.y+connectButton.height + 20);
   if(mobileView) {inputCityID.size(btnW/1.5,40);}
   else {inputCityID.size(200,40);}
   inputCityID.class('inputfield');
- //----------------- кнопка set city ID -------------
+ //----------------- РєРЅРѕРїРєР° set city ID -------------
   const setCityID = createButton('set ID');
   setCityID.mousePressed(setTownID);
 //  dateButton.style('font-size', '18px');
@@ -488,7 +503,7 @@ forecastEn.style('color', '#ffffff');
 forecastEn.style('font-size', '16px');
 forecastEn.style('margin', '3px');
 forecastEn.style('font-family','"Courier New", "Lucida Console", monospace');
-forecastEn.position(setCityID.x + setCityID.width+25,setCityID.y-15);
+forecastEn.position(setCityID.x + setCityID.width+25,setCityID.y-25);
 
 //--------------------- checkbox forecast enable function ------------------------  
   let forecastCheckBox = createInput('forecast','checkbox');
@@ -513,24 +528,24 @@ forecastEn.position(setCityID.x + setCityID.width+25,setCityID.y-15);
   currentKey.class('currentdata');
   currentKey.id('curkey');
   currentKey.position(15,inputCityID.y+inputCityID.height+10); 
-  //--------------- текстовый ввод weather key ---------------------------  
-    inputWeatherKey = createInput().attribute('placeholder', 'enter AccuWeather keyAPI');  // а можно через добавление атрибута
+  //--------------- С‚РµРєСЃС‚РѕРІС‹Р№ РІРІРѕРґ weather key ---------------------------  
+    inputWeatherKey = createInput().attribute('placeholder', 'enter AccuWeather keyAPI');  // Р° РјРѕР¶РЅРѕ С‡РµСЂРµР· РґРѕР±Р°РІР»РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р°
   inputWeatherKey.position( 15, currentKey.y+currentKey.height+10);
 //  inputSSID.position(15, connectButton.y+connectButton.height + 20);
   if(mobileView) {inputWeatherKey.size(btnW*1.4,40);}
   else {inputWeatherKey.size(420,40);}
   inputWeatherKey.class('inputfield');
   inputWeatherKey.id('weatherKEY');
-    //--------------- текстовый for testing parsing ---------------------------  
-    inputParsing = createInput().attribute('placeholder', 'enter data for parsing');  // а можно через добавление атрибута
-  inputParsing.position( 15, 800);
-//  inputSSID.position(15, connectButton.y+connectButton.height + 20);
-  if(mobileView) {inputParsing.size(btnW*1.4,40);}
-  else {inputParsing.size(720,40);}
-  inputParsing.class('inputfield');
-  inputParsing.input(parsingEvent);
 
- //----------------- кнопка set city KEY -------------
+    //--------------- С‚РµРєСЃС‚РѕРІС‹Р№ РІРІРѕРґ for testing parsing ---------------------------  
+  //inputParsing = createInput().attribute('placeholder', 'enter data for parsing');  // Р° РјРѕР¶РЅРѕ С‡РµСЂРµР· РґРѕР±Р°РІР»РµРЅРёРµ Р°С‚СЂРёР±СѓС‚Р°
+  //inputParsing.position( 15, 800);
+  //if(mobileView) {inputParsing.size(btnW*1.4,40);}
+  //else {inputParsing.size(720,40);}
+  //inputParsing.class('inputfield');
+  //inputParsing.input(parsingEvent);
+
+ //----------------- РєРЅРѕРїРєР° set city KEY -------------
   const setCityKey = createButton('set KEY');
   setCityKey.mousePressed(setKeyAPI);
 //  dateButton.style('font-size', '18px');
@@ -546,7 +561,7 @@ forecastEn.position(setCityID.x + setCityID.width+25,setCityID.y-15);
             //---------- small -------------
     buttSmall = createImg('image/small_1.png');
 //    buttSmall.position(15, inputWeatherKey.y + inputWeatherKey.height + 25);
-buttSmall.position(650, disConnectButton.y+20);
+buttSmall.position(650, disConnectButton.y+50);
 if(mobileView) {
   buttSmall.size(iconW/1.2,iconW/1.8);
   buttSmall.position(15, inputWeatherKey.y+inputWeatherKey.height+30);
@@ -562,7 +577,7 @@ if(mobileView) {
           //---------- big ---------------
    buttBig = createImg('image/big_2.png');
 //  
-    buttBig.position(buttSmall.x+buttSmall.width +20, disConnectButton.y+20);
+    buttBig.position(buttSmall.x+buttSmall.width +20, buttSmall.y);
   if(mobileView) {
   buttBig.size(iconW/1.2,iconW/1.8);
 buttBig.position(buttSmall.x+buttSmall.width +20, inputWeatherKey.y + inputWeatherKey.height + 30);
@@ -577,7 +592,7 @@ buttBig.position(buttSmall.x+buttSmall.width +20, inputWeatherKey.y + inputWeath
     buttBig.class('faceButton');
             //------------- big half -----------------
     buttBigHalf = createImg('image/big_half_3.png');
-    buttBigHalf.position(buttBig.x+buttBig.width +20, disConnectButton.y+20);
+    buttBigHalf.position(buttBig.x+buttBig.width +20, buttSmall.y);
 
    if(mobileView) {
     buttBigHalf.position(buttBig.x+buttBig.width +20, inputWeatherKey.y + inputWeatherKey.height + 30); 
@@ -672,13 +687,13 @@ buttBig.position(buttSmall.x+buttSmall.width +20, inputWeatherKey.y + inputWeath
     buttChat.mousePressed(setClockFace_10);
     buttChat.class('faceButton');
 //+++++++++++++++++++++ clockface title +++++++++++++++++++++++++
-let p = createP('select watchface');
-  p.style('font-family','"Courier New", "Lucida Console", monospace');
-  p.style('margin', '2px');
-  p.style('color', '#efefef');
-  p.style('font-size', '16px');
-  p.position(buttBig.x+10, disConnectButton.y);
-  if(mobileView) {  p.position(buttSmall.x+buttSmall.width, buttBig.y-25 );}
+//let p = createP('select watchface');
+//  p.style('font-family','"Courier New", "Lucida Console", monospace');
+//  p.style('margin', '2px');
+//  p.style('color', '#efefef');
+//  p.style('font-size', '16px');
+//  p.position(buttBig.x+10, disConnectButton.y);
+//  if(mobileView) {  p.position(buttSmall.x+buttSmall.width, buttBig.y-25 );}
 
   
 //  let box_new = createInput('click','checkbox');
@@ -699,7 +714,9 @@ let p = createP('select watchface');
   
 }
 
-
+function windowResized() {
+resizeCanvas(windowWidth, windowHeight);
+}
 
 function draw() {
 //  if (mouseIsPressed === true) {
@@ -718,13 +735,13 @@ function draw() {
 //    text('Disconnected :/', 220, title.y + 65);
   }
 
-rect(635, buttSmall.y -20, buttBigHalf.width*3 + 65, buttSmall.height*3+75);
-if(mobileView) {
-rect(5, buttSmall.y -20, buttBigHalf.x+buttBigHalf.width +5, buttSmall.height*3+65);
-}
-fill('gray');
+//rect(635, buttSmall.y -20, buttBigHalf.width*3 + 65, buttSmall.height*3+75);
+//if(mobileView) {
+//rect(5, buttSmall.y -20, buttBigHalf.x+buttBigHalf.width +5, buttSmall.height*3+65);
+//}
+//fill('gray');
 //------------------------------------- 
-text('BLE data > ',15,inputWeatherKey.y+inputWeatherKey.height+50);
+text('BLE data >  ',15,inputWeatherKey.y+inputWeatherKey.height+50);
 text(receivedValue,125,inputWeatherKey.y+inputWeatherKey.height+50);
 
 //if(parseBright=='1') {
@@ -763,6 +780,7 @@ switch(forEn) {
 }
 
 
+document.getElementById("curutc").innerHTML = "UTC: " + parseOffset;   // current UTC offset
 document.getElementById("cursensid").innerHTML = "current ID: " + parseSenId;   // current sensor ID
 document.getElementById("cursensmac").innerHTML = "current MAC: " + parseMAC;    // current sensor MAC
 document.getElementById("curcityid").innerHTML = "current city ID: " + parseCityId;  // current city ID
@@ -778,7 +796,8 @@ document.getElementById("curkey").innerHTML = "current keyAPI: " + parseKey;    
 }  // draw
 
 /// Add these lines below sketch to prevent scrolling on mobile
-//function touchMoved() {
+function touchMoved() {
   // do some stuff
-//  return false;
-//}
+  return false;
+}
+
