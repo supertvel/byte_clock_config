@@ -52,8 +52,8 @@ html, body {
 }
 
 .newCheckbox {
-  width: 30px;
-  height: 30px;  
+  width: 33px;
+  height: 33px;  
 }
 
 .timeDateInput {
@@ -248,3 +248,4 @@ html, body {
     outline: rgb(59, 153, 52) auto 5px;
 }
 *********************************************************/
+
